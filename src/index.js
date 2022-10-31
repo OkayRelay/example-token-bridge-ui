@@ -9,6 +9,7 @@ import { AlgorandContextProvider } from "./contexts/AlgorandWalletContext";
 import AptosWalletProvider from "./contexts/AptosWalletContext";
 import { EthereumProviderProvider } from "./contexts/EthereumProviderContext";
 import { SolanaWalletProvider } from "./contexts/SolanaWalletContext.tsx";
+import SuiWalletProvider from "./contexts/SuiWalletContext";
 import { TerraWalletProvider } from "./contexts/TerraWalletContext.tsx";
 import XplaWalletProvider from "./contexts/XplaWalletContext";
 import ErrorBoundary from "./ErrorBoundary";
@@ -28,9 +29,11 @@ ReactDOM.render(
                   <AlgorandContextProvider>
                     <XplaWalletProvider>
                       <AptosWalletProvider>
-                        <HashRouter>
-                          <App />
-                        </HashRouter>
+                        <SuiWalletProvider>
+                          <HashRouter>
+                            <App />
+                          </HashRouter>
+                        </SuiWalletProvider>
                       </AptosWalletProvider>
                     </XplaWalletProvider>
                   </AlgorandContextProvider>
@@ -42,5 +45,5 @@ ReactDOM.render(
       </ThemeProvider>
     </Provider>
   </ErrorBoundary>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
