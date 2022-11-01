@@ -16,6 +16,7 @@ import {
   CHAIN_ID_OASIS,
   CHAIN_ID_POLYGON,
   CHAIN_ID_SOLANA,
+  CHAIN_ID_SUI,
   CHAIN_ID_TERRA,
   CHAIN_ID_TERRA2,
   CHAIN_ID_XPLA,
@@ -43,6 +44,7 @@ import neonIcon from "../icons/neon.svg";
 import oasisIcon from "../icons/oasis-network-rose-logo.svg";
 import polygonIcon from "../icons/polygon.svg";
 import solanaIcon from "../icons/solana.svg";
+import suiIcon from "../icons/sui.svg";
 import terraIcon from "../icons/terra.svg";
 import terra2Icon from "../icons/terra2.svg";
 import xplaIcon from "../icons/xpla.svg";
@@ -142,6 +144,11 @@ export const CHAINS: ChainInfo[] =
           logo: solanaIcon,
         },
         {
+          id: CHAIN_ID_SUI,
+          name: "Sui",
+          logo: suiIcon,
+        },
+        {
           id: CHAIN_ID_TERRA,
           name: "Terra Classic",
           logo: terraIcon,
@@ -209,7 +216,7 @@ export const CHAINS_WITH_NFT_SUPPORT = CHAINS.filter(
     id === CHAIN_ID_ACALA ||
     id === CHAIN_ID_KLAYTN ||
     id === CHAIN_ID_CELO ||
-    id === CHAIN_ID_NEON
+    id === CHAIN_ID_NEON,
 );
 export type ChainsById = { [key in ChainId]: ChainInfo };
 export const CHAINS_BY_ID: ChainsById = CHAINS.reduce((obj, chain) => {
@@ -255,6 +262,8 @@ export const getDefaultNativeCurrencySymbol = (chainId: ChainId) =>
     ? "XPLA"
     : chainId === CHAIN_ID_APTOS
     ? "APTOS"
+    : chainId === CHAIN_ID_SUI
+    ? "SUI"
     : "";
 
 export const getDefaultNativeCurrencyAddressEvm = (chainId: ChainId) => {
@@ -439,10 +448,10 @@ export const SOL_TOKEN_BRIDGE_ADDRESS =
   CONTRACTS[CLUSTER === "testnet" ? "TESTNET" : "DEVNET"].solana.token_bridge;
 
 export const ALGORAND_BRIDGE_ID = BigInt(
-  CONTRACTS[CLUSTER === "testnet" ? "TESTNET" : "DEVNET"].algorand.core
+  CONTRACTS[CLUSTER === "testnet" ? "TESTNET" : "DEVNET"].algorand.core,
 );
 export const ALGORAND_TOKEN_BRIDGE_ID = BigInt(
-  CONTRACTS[CLUSTER === "testnet" ? "TESTNET" : "DEVNET"].algorand.token_bridge
+  CONTRACTS[CLUSTER === "testnet" ? "TESTNET" : "DEVNET"].algorand.token_bridge,
 );
 
 export const getBridgeAddressForChain = (chainId: ChainId) =>
@@ -476,7 +485,7 @@ export const COVALENT_GET_TOKENS_URL = (
   chainId: ChainId,
   walletAddress: string,
   nft?: boolean,
-  noNftMetadata?: boolean
+  noNftMetadata?: boolean,
 ) => {
   const chainNum =
     chainId === CHAIN_ID_ETH || chainId === CHAIN_ID_ETHEREUM_ROPSTEN
@@ -506,7 +515,7 @@ export const COVALENT_GET_TOKENS_URL = (
 
 export const BLOCKSCOUT_GET_TOKENS_URL = (
   chainId: ChainId,
-  walletAddress: string
+  walletAddress: string,
 ) => {
   const baseUrl =
     chainId === CHAIN_ID_OASIS
@@ -710,7 +719,7 @@ export const POLYGON_TERRA_WRAPPED_TOKENS = [
 
 export const getIsTransferDisabled = (
   chainId: ChainId,
-  isSourceChain: boolean
+  isSourceChain: boolean,
 ) => {
   const disableTransfers = CHAIN_CONFIG_MAP[chainId]?.disableTransfers;
   return disableTransfers === "from"
@@ -771,7 +780,7 @@ export const DISABLED_TOKEN_TRANSFERS: {
 export const getIsTokenTransferDisabled = (
   sourceChain: ChainId,
   targetChain: ChainId,
-  tokenAddress: string
+  tokenAddress: string,
 ): boolean => {
   const disabledTransfers =
     DISABLED_TOKEN_TRANSFERS[sourceChain]?.[tokenAddress];
