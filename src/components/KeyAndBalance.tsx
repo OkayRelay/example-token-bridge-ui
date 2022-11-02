@@ -3,6 +3,7 @@ import {
   CHAIN_ID_ALGORAND,
   CHAIN_ID_APTOS,
   CHAIN_ID_SOLANA,
+  CHAIN_ID_SUI,
   CHAIN_ID_XPLA,
   isEVMChain,
   isTerraChain,
@@ -11,6 +12,7 @@ import AlgorandWalletKey from "./AlgorandWalletKey";
 import AptosWalletKey from "./AptosWalletKey";
 import EthereumSignerKey from "./EthereumSignerKey";
 import SolanaWalletKey from "./SolanaWalletKey";
+import SuiWalletKey from "./SuiWalletKey";
 import TerraWalletKey from "./TerraWalletKey";
 import XplaWalletKey from "./XplaWalletKey";
 
@@ -32,6 +34,9 @@ function KeyAndBalance({ chainId }: { chainId: ChainId }) {
   }
   if (chainId === CHAIN_ID_APTOS) {
     return <AptosWalletKey />;
+  }
+  if (chainId === CHAIN_ID_SUI) {
+    return <SuiWalletKey />;
   }
   return null;
 }
