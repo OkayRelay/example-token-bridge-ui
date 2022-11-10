@@ -3,6 +3,7 @@ import {
   CHAIN_ID_ALGORAND,
   CHAIN_ID_APTOS,
   CHAIN_ID_SOLANA,
+  CHAIN_ID_SUI,
   CHAIN_ID_XPLA,
   isEVMChain,
   isTerraChain,
@@ -18,6 +19,7 @@ import {
   useEthereumProvider,
 } from "../contexts/EthereumProviderContext";
 import { useSolanaWallet } from "../contexts/SolanaWalletContext";
+import { useSuiContext } from "../contexts/SuiWalletContext";
 import { APTOS_NETWORK, CLUSTER, getEvmChainId } from "../utils/consts";
 import {
   EVM_RPC_MAP,
@@ -75,6 +77,9 @@ function useIsWalletReady(
   const hasCorrectAptosNetwork = aptosNetwork?.name
     ?.toLowerCase()
     .includes(APTOS_NETWORK.toLowerCase());
+  const { wallet, accounts } = useSuiContext();
+  const suiWallet = accounts;
+  const hasSuiWallet = !!wallet;
 
   const forceNetworkSwitch = useCallback(async () => {
     if (provider && correctEvmNetwork) {
@@ -164,6 +169,14 @@ function useIsWalletReady(
         );
       }
     }
+    if (chainId === CHAIN_ID_SUI && hasSuiWallet && suiWallet) {
+      return createWalletStatus(
+        true,
+        undefined,
+        forceNetworkSwitch,
+        suiWallet[0]
+      );
+    }
     if (isEVMChain(chainId) && hasEthInfo && signerAddress) {
       if (hasCorrectEvmNetwork) {
         return createWalletStatus(
@@ -209,6 +222,8 @@ function useIsWalletReady(
     hasAptosWallet,
     aptosAddress,
     hasCorrectAptosNetwork,
+    suiWallet,
+    hasSuiWallet,
   ]);
 }
 

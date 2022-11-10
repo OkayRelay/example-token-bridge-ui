@@ -412,6 +412,14 @@ export const APTOS_NETWORK =
 export const APTOS_NATIVE_DECIMALS = 8;
 export const APTOS_NATIVE_TOKEN_KEY = "0x1::aptos_coin::AptosCoin";
 
+export const SUI_URL =
+  CLUSTER === "testnet"
+    ? "https://fullnode.devnet.sui.io:443"
+    : "http://localhost:5001";
+
+export const SUI_NATIVE_DECIMALS = 9;
+export const SUI_NATIVE_TOKEN_KEY = "0x2::sui::SUI";
+
 export const ALGORAND_HOST =
   CLUSTER === "testnet"
     ? {
