@@ -26,6 +26,7 @@ export function getRelayAssetInfo(
   if (!originChain || !originAsset || !info) {
     return null;
   }
+  console.log(info, originAsset, originChain)
   return info.supportedTokens?.find(
     (x) =>
       originAsset.toLowerCase() === x.address?.toLowerCase() &&
@@ -154,7 +155,7 @@ function useRelayerInfo(
       originAssetNative,
       relayerInfo.data
     );
-
+      console.log(relayerAsset)
     //same check as relayable, to satiate typescript.
     if (
       !(

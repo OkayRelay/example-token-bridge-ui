@@ -84,15 +84,15 @@ function App() {
       {
         <AppBar position="static" elevation={0} style={{ marginBottom: 40 }}>
           <Toolbar variant="dense">
-            <Button component={Link} to="/usdc">
+            {/* <Button component={Link} to="/usdc">
               USDC
-            </Button>
+            </Button> */}
             <Button component={Link} to="/transfer">
               Tokens
             </Button>
-            <Button component={Link} to="/nft">
+            {/* <Button component={Link} to="/nft">
               NFTs
-            </Button>
+            </Button> */}
             <Button component={Link} to="/redeem">
               Redeem
             </Button>
@@ -104,7 +104,7 @@ function App() {
               margin="dense"
             >
               <MenuItem value="testnet">Testnet</MenuItem>
-              <MenuItem value="devnet">Devnet</MenuItem>
+              {/* <MenuItem value="devnet">Devnet</MenuItem> */}
             </Select>
           </Toolbar>
         </AppBar>
@@ -115,14 +115,14 @@ function App() {
             white
             subtitle={
               <>
-                <Typography>
+                {/* <Typography>
                   This is a developmental token bridge that tests transfers
                   across chains for tokens and NFTs wrapped by Wormhole.
-                </Typography>
+                </Typography> */}
               </>
             }
           >
-            Token Bridge
+            Okay Token Bridge
           </HeaderText>
         </Container>
       ) : null}
@@ -163,7 +163,7 @@ function App() {
       <div className={classes.gradientRight2}></div>
       <div className={classes.gradientLeft}></div>
       <div className={classes.gradientLeft2}></div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
