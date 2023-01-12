@@ -13,6 +13,7 @@ import {
   CHAIN_ID_INJECTIVE,
   CHAIN_ID_KARURA,
   CHAIN_ID_KLAYTN,
+  CHAIN_ID_MOONBEAM,
   CHAIN_ID_NEAR,
   CHAIN_ID_NEON,
   CHAIN_ID_OASIS,
@@ -45,6 +46,7 @@ import klaytnIcon from "../icons/klaytn.svg";
 import neonIcon from "../icons/neon.svg";
 import oasisIcon from "../icons/oasis-network-rose-logo.svg";
 import polygonIcon from "../icons/polygon.svg";
+import moonbeamIcon from "../icons/moonbeam.svg";
 import solanaIcon from "../icons/solana.svg";
 import terraIcon from "../icons/terra.svg";
 import terra2Icon from "../icons/terra2.svg";
@@ -65,6 +67,63 @@ export interface ChainInfo {
   id: ChainId;
   name: string;
   logo: string;
+}
+export const PRIME_CHAIN_TO_ADDRESS: Record<number, string> = CLUSTER === "testnet" ? {
+  [CHAIN_ID_MOONBEAM]: "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
+  [CHAIN_ID_ETH]:"0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
+  [CHAIN_ID_POLYGON]:"0x45951086332fC48935A58d6243a9839a04c08B1F",
+  [CHAIN_ID_FANTOM]:"",
+}: {}
+
+export const TOKEN_TO_SUPPORTED_CHAIN = {
+  "usp": {
+    sources: [CHAIN_ID_MOONBEAM],
+    targets: [CHAIN_ID_ETH,CHAIN_ID_POLYGON, CHAIN_ID_FANTOM],
+    addresses: {
+      [CHAIN_ID_MOONBEAM]: {
+        "decimals": 18,
+        "testnet": "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
+        "mainnet": ""
+      },
+      [CHAIN_ID_ETH]: {
+        "decimals": 18,
+        "testnet": "0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
+        "mainnet": ""
+      },
+      [CHAIN_ID_POLYGON]: {
+        "decimals": 18,
+        "testnet": "0x45951086332fC48935A58d6243a9839a04c08B1F",
+        "mainnet": ""
+      },
+      [CHAIN_ID_FANTOM]: {
+        "decimals": 18,
+        "testnet": "0x45951086332fC48935A58d6243a9839a04c08B1F",
+        "mainnet": ""
+      },
+    }
+  },
+  "eth": {
+    sources: [CHAIN_ID_ETH],
+    targets: [CHAIN_ID_MOONBEAM,CHAIN_ID_POLYGON, CHAIN_ID_FANTOM],
+    addresses: {
+      [CHAIN_ID_ETH]: {
+        "decimals": 18,
+        "testnet": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
+        "mainnet": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+      },
+    }
+  },
+  "matic": {
+    sources: [CHAIN_ID_POLYGON],
+    targets: [CHAIN_ID_MOONBEAM,CHAIN_ID_ETH, CHAIN_ID_FANTOM],
+    addresses: {
+      [CHAIN_ID_ETH]: {
+        "decimals": 18,
+        "testnet": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
+        "mainnet": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+      },
+    }
+  },
 }
 export const CHAINS: ChainInfo[] =
   CLUSTER === "testnet"
@@ -168,6 +227,11 @@ export const CHAINS: ChainInfo[] =
           id: CHAIN_ID_POLYGON,
           name: "Polygon",
           logo: polygonIcon,
+        },
+        {
+          id: CHAIN_ID_MOONBEAM,
+          name: "Moonbeam",
+          logo: moonbeamIcon,
         },
         {
           id: CHAIN_ID_ETH,
@@ -333,6 +397,8 @@ export const getExplorerName = (chainId: ChainId) =>
     ? "XPLA Explorer"
     : chainId === CHAIN_ID_ARBITRUM
     ? "Arbiscan"
+    : chainId === CHAIN_ID_MOONBEAM
+    ? "Moonbeam"
     : "Explorer";
 export const WORMHOLE_RPC_HOSTS =
   CLUSTER === "testnet"
@@ -352,6 +418,7 @@ export const KLAYTN_NETWORK_CHAIN_ID = CLUSTER === "testnet" ? 1001 : 1381;
 export const CELO_NETWORK_CHAIN_ID = CLUSTER === "testnet" ? 44787 : 1381;
 export const NEON_NETWORK_CHAIN_ID = CLUSTER === "testnet" ? 245022926 : 1381;
 export const ARBITRUM_NETWORK_CHAIN_ID = CLUSTER === "testnet" ? 421613 : 1381;
+export const MOONBEAM_NETWORK_CHAIN_ID = CLUSTER === "testnet" ? 1287 : 1284;
 export const getEvmChainId = (chainId: ChainId) =>
   chainId === CHAIN_ID_ETH
     ? ETH_NETWORK_CHAIN_ID
@@ -379,6 +446,8 @@ export const getEvmChainId = (chainId: ChainId) =>
     ? NEON_NETWORK_CHAIN_ID
     : chainId === CHAIN_ID_ARBITRUM
     ? ARBITRUM_NETWORK_CHAIN_ID
+    : chainId === CHAIN_ID_MOONBEAM
+    ? MOONBEAM_NETWORK_CHAIN_ID
     : undefined;
 export const SOLANA_HOST = process.env.REACT_APP_SOLANA_API_URL
   ? process.env.REACT_APP_SOLANA_API_URL
@@ -581,6 +650,12 @@ export const WETH_ADDRESS =
     ? "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6"
     : "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E";
 export const WETH_DECIMALS = 18;
+
+export const WGMLR_ADDRESS =
+  CLUSTER === "testnet"
+    ? "0x0000000000000000000000000000000000000000"
+    : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+export const WGMLR_DECIMALS = 18;
 
 export const WBNB_ADDRESS =
   CLUSTER === "testnet"
@@ -789,6 +864,7 @@ export const RELAYER_COMPARE_ASSET: RelayerCompareAsset = {
   [CHAIN_ID_TERRA]: "terra-luna",
   [CHAIN_ID_BSC]: "binancecoin",
   [CHAIN_ID_POLYGON]: "matic-network",
+  [CHAIN_ID_MOONBEAM]: "moonbeam",
   [CHAIN_ID_AVAX]: "avalanche-2",
   [CHAIN_ID_OASIS]: "oasis-network",
   [CHAIN_ID_FANTOM]: "fantom",

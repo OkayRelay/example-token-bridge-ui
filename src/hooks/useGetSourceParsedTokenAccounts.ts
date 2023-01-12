@@ -12,6 +12,7 @@ import {
   CHAIN_ID_INJECTIVE,
   CHAIN_ID_KARURA,
   CHAIN_ID_KLAYTN,
+  CHAIN_ID_MOONBEAM,
   CHAIN_ID_NEAR,
   CHAIN_ID_NEON,
   CHAIN_ID_OASIS,
@@ -55,6 +56,8 @@ import fantomIcon from "../icons/fantom.svg";
 import karuraIcon from "../icons/karura.svg";
 import klaytnIcon from "../icons/klaytn.svg";
 import neonIcon from "../icons/neon.svg";
+import moonbeamIcon from "../icons/moonbeam.svg";
+import primeIcon from "../icons/prime.svg";
 import oasisIcon from "../icons/oasis-network-rose-logo.svg";
 import polygonIcon from "../icons/polygon.svg";
 import {
@@ -117,6 +120,8 @@ import {
   WROSE_ADDRESS,
   WROSE_DECIMALS,
   getDefaultNativeCurrencyAddressEvm,
+  WGMLR_ADDRESS,
+  WGMLR_DECIMALS,
 } from "../utils/consts";
 import { makeNearAccount } from "../utils/near";
 import {
@@ -315,7 +320,28 @@ const createNativePolygonParsedTokenAccount = (
         );
       });
 };
-
+const createNativeMoonbeamParsedTokenAccount = (
+  provider: Provider,
+  signerAddress: string | undefined
+) => {
+  return !(provider && signerAddress)
+    ? Promise.reject()
+    : provider.getBalance(signerAddress).then((balanceInWei) => {
+        const balanceInEth = ethers.utils.formatEther(balanceInWei);
+        return createParsedTokenAccount(
+          signerAddress, //public key
+          WGMLR_ADDRESS, //Mint key, On the other side this will be WMATIC, so this is hopefully a white lie.
+          balanceInWei.toString(), //amount, in wei
+          WGMLR_DECIMALS, //Luckily both MATIC and WMATIC have 18 decimals, so this should not be an issue.
+          parseFloat(balanceInEth), //This loses precision, but is a limitation of the current datamodel. This field is essentially deprecated
+          balanceInEth.toString(), //This is the actual display field, which has full precision.
+          "GMR", //A white lie for display purposes
+          "GMR", //A white lie for display purposes
+          moonbeamIcon,
+          true //isNativeAsset
+        );
+      });
+};
 const createNativeAvaxParsedTokenAccount = (
   provider: Provider,
   signerAddress: string | undefined
@@ -608,7 +634,6 @@ const getEthereumAccountsCovalent = async (
     const output = [] as CovalentData[];
     const response = await axios.get(url);
     const tokens = response.data.data.items;
-
     if (tokens instanceof Array && tokens.length) {
       for (const item of tokens) {
         // TODO: filter?
@@ -721,6 +746,70 @@ const getSolanaParsedTokenAccounts = async (
       }
       dispatch(receiveSourceParsedTokenAccounts(splParsedTokenAccounts));
     }
+  } catch (e) {
+    console.error(e);
+    dispatch(
+      nft
+        ? errorSourceParsedTokenAccountsNFT("Failed to load NFT metadata")
+        : errorSourceParsedTokenAccounts("Failed to load token metadata.")
+    );
+  }
+};
+
+const getMoonbeamParsedTokenAccounts = async (
+  provider: Provider,
+  signerAddress: string,
+  dispatch: Dispatch,
+  nft: boolean
+) => {
+  dispatch(
+    nft ? fetchSourceParsedTokenAccountsNFT() : fetchSourceParsedTokenAccounts()
+  );
+  try {
+    let splParsedTokenAccounts: ParsedTokenAccount[] = []
+    if(provider) {
+
+let tokenAddress = "0x54690d8e1cc638D3A2471c652bB68c77C79855a3";
+
+// The minimum ABI to get ERC20 Token balance
+let minABI = [
+  // balanceOf
+  {
+    "constant":true,
+    "inputs":[{"name":"_owner","type":"address"}],
+    "name":"balanceOf",
+    "outputs":[{"name":"balance","type":"uint256"}],
+    "type":"function"
+  },
+  // decimals
+  {
+    "constant":true,
+    "inputs":[],
+    "name":"decimals",
+    "outputs":[{"name":"","type":"uint8"}],
+    "type":"function"
+  }
+];
+
+const contract = new ethers.Contract(tokenAddress, minABI, provider);
+const balanceInWei = await contract.balanceOf(signerAddress)
+    const balanceInEth = ethers.utils.formatEther(balanceInWei);
+    // uncomment to test token account in picker, useful for debugging
+    splParsedTokenAccounts.push(createParsedTokenAccount(
+      signerAddress, //public key
+      "0x54690d8e1cc638D3A2471c652bB68c77C79855a3", //Mint key, On the other side this will be wklay, so this is hopefully a white lie.
+      balanceInWei.toString(), //amount, in wei
+      18,
+      parseFloat(balanceInEth), //This loses precision, but is a limitation of the current datamodel. This field is essentially deprecated
+      balanceInEth.toString(), //This is the actual display field, which has full precision.
+      "Prime protocol", //A white lie for display purposes
+      "USP", //A white lie for display purposes
+      primeIcon,
+      false //isNativeAsset
+    ));
+    }
+
+      dispatch(receiveSourceParsedTokenAccounts(splParsedTokenAccounts));
   } catch (e) {
     console.error(e);
     dispatch(
@@ -953,6 +1042,19 @@ function useGetAvailableTokens(nft: boolean = false) {
     return () => {};
   }, [dispatch, solanaWallet, lookupChain, solPK, tokenAccounts, nft]);
 
+  //Moonbeam
+  useEffect(() => {
+    if (lookupChain === CHAIN_ID_MOONBEAM && signerAddress) {
+      if (
+        !(tokenAccounts.data || tokenAccounts.isFetching || tokenAccounts.error)
+      ) {
+        getMoonbeamParsedTokenAccounts(provider,signerAddress, dispatch, nft);
+      }
+    }
+
+    return () => {};
+  }, [dispatch, provider, lookupChain,signerAddress, tokenAccounts, nft]);
+
   //Solana Mint Accounts lookup
   useEffect(() => {
     if (lookupChain !== CHAIN_ID_SOLANA || !tokenAccounts.data?.length) {
@@ -1085,6 +1187,40 @@ function useGetAvailableTokens(nft: boolean = false) {
     ) {
       setEthNativeAccountLoading(true);
       createNativePolygonParsedTokenAccount(provider, signerAddress).then(
+        (result) => {
+          console.log("create native account returned with value", result);
+          if (!cancelled) {
+            setEthNativeAccount(result);
+            setEthNativeAccountLoading(false);
+            setEthNativeAccountError("");
+          }
+        },
+        (error) => {
+          if (!cancelled) {
+            setEthNativeAccount(undefined);
+            setEthNativeAccountLoading(false);
+            setEthNativeAccountError("Unable to retrieve your MATIC balance.");
+          }
+        }
+      );
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lookupChain, provider, signerAddress, nft, ethNativeAccount]);
+
+  //Polygon native asset load
+  useEffect(() => {
+    let cancelled = false;
+    if (
+      signerAddress &&
+      lookupChain === CHAIN_ID_MOONBEAM &&
+      !ethNativeAccount &&
+      !nft
+    ) {
+      setEthNativeAccountLoading(true);
+      createNativeMoonbeamParsedTokenAccount(provider, signerAddress).then(
         (result) => {
           console.log("create native account returned with value", result);
           if (!cancelled) {

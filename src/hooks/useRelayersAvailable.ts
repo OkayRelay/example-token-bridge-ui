@@ -1,4 +1,4 @@
-import { ChainId } from "@certusone/wormhole-sdk";
+import { ChainId, CHAIN_ID_MOONBEAM, CHAIN_ID_POLYGON } from "@certusone/wormhole-sdk";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import {
   fetchRelayerTokenInfo,
   receiveRelayerTokenInfo,
 } from "../store/tokenSlice";
-import { RELAYER_INFO_URL } from "../utils/consts";
+import { PRIME_CHAIN_TO_ADDRESS, RELAYER_INFO_URL, WMATIC_ADDRESS } from "../utils/consts";
 
 export type RelayToken = {
   chainId?: ChainId;
@@ -135,9 +135,14 @@ const getRelayersAvailable = (dispatch: Dispatch) => {
         "coingeckoId": "celo"
       },
       {
-        "chainId": 15,
-        "address": "near",
-        "coingeckoId": "near"
+        "chainId": CHAIN_ID_POLYGON,
+        "address": WMATIC_ADDRESS,
+        "coingeckoId": "matic"
+      },
+      {
+        "chainId": CHAIN_ID_MOONBEAM,
+        "address": PRIME_CHAIN_TO_ADDRESS[CHAIN_ID_MOONBEAM],
+        "coingeckoId": "usd-coin"
       }
     ],
     "relayers": [
@@ -189,6 +194,10 @@ const getRelayersAvailable = (dispatch: Dispatch) => {
         "feeUsd": 0.5
       },
       "14": {
+        "type": "flat",
+        "feeUsd": 0.5
+      },
+      "16": {
         "type": "flat",
         "feeUsd": 0.5
       }
