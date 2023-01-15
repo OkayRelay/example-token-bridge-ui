@@ -44,7 +44,6 @@ const useRelayersAvailable = (
   shouldFire: boolean
 ): DataWrapper<RelayerTokenInfo> => {
   const relayerTokenInfo = useSelector(selectRelayerTokenInfo);
-  // console.log("relayerTokenInfo", relayerTokenInfo);
   const dispatch = useDispatch();
   const internalShouldFire =
     shouldFire &&
@@ -154,52 +153,51 @@ const getRelayersAvailable = (dispatch: Dispatch) => {
     "feeSchedule": {
       "1": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "2": {
-        "type": "percent",
-        "feePercent": 1.25,
-        "gasEstimate": 280000
+        "type": "flat",
+        "feeUsd": 20.25
       },
       "3": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "4": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "5": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "6": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "7": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "9": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "10": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "13": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "14": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "16": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       }
     }
   }));

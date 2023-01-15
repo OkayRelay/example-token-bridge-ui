@@ -39,6 +39,7 @@ import auroraIcon from "../icons/aurora.svg";
 import avaxIcon from "../icons/avax.svg";
 import bscIcon from "../icons/bsc.svg";
 import celoIcon from "../icons/celo.svg";
+import primeIcon from "../icons/prime.svg";
 import ethIcon from "../icons/eth.svg";
 import fantomIcon from "../icons/fantom.svg";
 import karuraIcon from "../icons/karura.svg";
@@ -57,6 +58,7 @@ import { getNetworkInfo, Network } from "@injectivelabs/networks";
 import { ChainId as InjectiveChainId } from "@injectivelabs/ts-types";
 import nearIcon from "../icons/near.svg";
 import { ConnectConfig, keyStores } from "near-api-js";
+import { Token } from "./type";
 
 export type Cluster = "devnet" | "testnet";
 const urlParams = new URLSearchParams(window.location.search);
@@ -68,63 +70,121 @@ export interface ChainInfo {
   name: string;
   logo: string;
 }
-export const PRIME_CHAIN_TO_ADDRESS: Record<number, string> = CLUSTER === "testnet" ? {
-  [CHAIN_ID_MOONBEAM]: "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
-  [CHAIN_ID_ETH]:"0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
-  [CHAIN_ID_POLYGON]:"0x45951086332fC48935A58d6243a9839a04c08B1F",
-  [CHAIN_ID_FANTOM]:"",
-}: {}
+export const PRIME_CHAIN_TO_ADDRESS: Record<number, string> =
+  CLUSTER === "testnet"
+    ? {
+        [CHAIN_ID_MOONBEAM]: "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
+        [CHAIN_ID_ETH]: "0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
+        [CHAIN_ID_POLYGON]: "0x45951086332fC48935A58d6243a9839a04c08B1F",
+        [CHAIN_ID_FANTOM]: "",
+      }
+    : {};
 
-export const TOKEN_TO_SUPPORTED_CHAIN = {
-  "usp": {
-    sources: [CHAIN_ID_MOONBEAM],
-    targets: [CHAIN_ID_ETH,CHAIN_ID_POLYGON, CHAIN_ID_FANTOM],
-    addresses: {
-      [CHAIN_ID_MOONBEAM]: {
-        "decimals": 18,
-        "testnet": "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
-        "mainnet": ""
-      },
-      [CHAIN_ID_ETH]: {
-        "decimals": 18,
-        "testnet": "0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
-        "mainnet": ""
-      },
-      [CHAIN_ID_POLYGON]: {
-        "decimals": 18,
-        "testnet": "0x45951086332fC48935A58d6243a9839a04c08B1F",
-        "mainnet": ""
-      },
-      [CHAIN_ID_FANTOM]: {
-        "decimals": 18,
-        "testnet": "0x45951086332fC48935A58d6243a9839a04c08B1F",
-        "mainnet": ""
-      },
-    }
-  },
-  "eth": {
+export const TOKENS: Record<string, Token> = {
+  // usp: {
+  //   sources: [CHAIN_ID_MOONBEAM],
+  //   targets: [CHAIN_ID_ETH, CHAIN_ID_POLYGON,CHAIN_ID_BSC, CHAIN_ID_FANTOM],
+  //   icon: primeIcon,
+  //   name: "Prime protocol",
+  //   id: "usp",
+  //   addresses: {
+  //     [CHAIN_ID_MOONBEAM]: {
+  //       decimals: 18,
+  //       testnet: "0x54690d8e1cc638D3A2471c652bB68c77C79855a3",
+  //       mainnet: "",
+  //     },
+  //     [CHAIN_ID_ETH]: {
+  //       decimals: 18,
+  //       testnet: "0x3A018F82cA7e425E79D33aeB59dDa564CB3f495b",
+  //       mainnet: "",
+  //     },
+  //     [CHAIN_ID_POLYGON]: {
+  //       decimals: 18,
+  //       testnet: "0x45951086332fC48935A58d6243a9839a04c08B1F",
+  //       mainnet: "",
+  //     },
+  //     [CHAIN_ID_FANTOM]: {
+  //       decimals: 18,
+  //       testnet: "0x45951086332fC48935A58d6243a9839a04c08B1F",
+  //       mainnet: "",
+  //     },
+  //   },
+  // },
+  eth: {
     sources: [CHAIN_ID_ETH],
-    targets: [CHAIN_ID_MOONBEAM,CHAIN_ID_POLYGON, CHAIN_ID_FANTOM],
+    icon: ethIcon,
+    name: "Ethereum",
+    id: "eth",
+    targets: [CHAIN_ID_MOONBEAM, CHAIN_ID_POLYGON,CHAIN_ID_BSC, CHAIN_ID_FANTOM],
     addresses: {
       [CHAIN_ID_ETH]: {
-        "decimals": 18,
-        "testnet": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
-        "mainnet": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+        decimals: 18,
+        testnet: "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
+        mainnet: "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
       },
-    }
+    },
   },
-  "matic": {
+  matic: {
     sources: [CHAIN_ID_POLYGON],
-    targets: [CHAIN_ID_MOONBEAM,CHAIN_ID_ETH, CHAIN_ID_FANTOM],
+    icon: polygonIcon,
+    name: "Matic",
+    id: "matic",
+    targets: [CHAIN_ID_MOONBEAM, CHAIN_ID_ETH,CHAIN_ID_BSC, CHAIN_ID_FANTOM],
     addresses: {
-      [CHAIN_ID_ETH]: {
-        "decimals": 18,
-        "testnet": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
-        "mainnet": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+      [CHAIN_ID_POLYGON]: {
+        decimals: 18,
+        testnet: "0x9c3c9283d3e44854697cd22d3faa240cfb032889",
+        mainnet: "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
       },
-    }
+    },
   },
-}
+  bnb: {
+    sources: [CHAIN_ID_BSC],
+    icon: bscIcon,
+    name: "BNB",
+    id: "bnb",
+    targets: [CHAIN_ID_POLYGON, CHAIN_ID_MOONBEAM, CHAIN_ID_ETH, CHAIN_ID_FANTOM],
+    addresses: {
+      [CHAIN_ID_BSC]: {
+        decimals: 18,
+        testnet: "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+        mainnet: "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+      },
+    },
+  },
+};
+export const CHAIN_ID_TO_INFO: Record<number, ChainInfo> = {
+  [CHAIN_ID_POLYGON]: {
+    id: CHAIN_ID_POLYGON,
+    name: "Polygon",
+    logo: polygonIcon,
+  },
+  [CHAIN_ID_MOONBEAM]: {
+    id: CHAIN_ID_MOONBEAM,
+    name: "Moonbeam",
+    logo: moonbeamIcon,
+  },
+  [CHAIN_ID_ETH]: {
+    id: CHAIN_ID_ETH,
+    name: "Ethereum (Goerli)",
+    logo: ethIcon,
+  },
+  [CHAIN_ID_FANTOM]: {
+    id: CHAIN_ID_FANTOM,
+    name: "Fantom",
+    logo: fantomIcon,
+  },
+  [CHAIN_ID_AVAX]: {
+    id: CHAIN_ID_AVAX,
+    name: "Avalanche",
+    logo: avaxIcon,
+  },
+  [CHAIN_ID_BSC]: {
+    id: CHAIN_ID_BSC,
+    name: "Binance Smart Chain",
+    logo: bscIcon,
+  },
+};
 export const CHAINS: ChainInfo[] =
   CLUSTER === "testnet"
     ? [
@@ -157,11 +217,6 @@ export const CHAINS: ChainInfo[] =
         //   id: CHAIN_ID_AVAX,
         //   name: "Avalanche",
         //   logo: avaxIcon,
-        // },
-        // {
-        //   id: CHAIN_ID_BSC,
-        //   name: "Binance Smart Chain",
-        //   logo: bscIcon,
         // },
         // {
         //   id: CHAIN_ID_CELO,
@@ -223,6 +278,11 @@ export const CHAINS: ChainInfo[] =
         //   name: "XPLA",
         //   logo: xplaIcon,
         // },
+        {
+          id: CHAIN_ID_BSC,
+          name: "Binance Smart Chain",
+          logo: bscIcon,
+        },
         {
           id: CHAIN_ID_POLYGON,
           name: "Polygon",

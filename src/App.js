@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
+  image: {
+    maxWidth: "100%"
+  },
 }));
 
 function App() {
@@ -111,19 +114,7 @@ function App() {
       }
       {["/transfer", "/nft", "/redeem"].includes(pathname) ? (
         <Container maxWidth="md" style={{ paddingBottom: 24 }}>
-          <HeaderText
-            white
-            subtitle={
-              <>
-                {/* <Typography>
-                  This is a developmental token bridge that tests transfers
-                  across chains for tokens and NFTs wrapped by Wormhole.
-                </Typography> */}
-              </>
-            }
-          >
-            Okay Token Bridge
-          </HeaderText>
+          <img className={classes.image} alt="" src={"./images/icon.png"} />
         </Container>
       ) : null}
       <Switch>

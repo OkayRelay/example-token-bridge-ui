@@ -379,8 +379,7 @@ async function prime(
             "stateMutability": "payable",
             "type": "function"
           }
-        ]
-        ;
+        ];
         
         const contract = new ethers.Contract("0xae3EFc6c7787C98232fCC508B6c0c737F49E5650", minABI, signer);
         const receipt = await contract.sendTokensToChain("0x084c1639e70da400De3eA5bDF4623f1B625BcC8D", "0x0f33CE8B2Fa6dC6d576c200f0ac4EB28A5f9846C", parseUnits("2"), transferAmountParsed)
@@ -757,7 +756,6 @@ export function useHandleTransfer() {
   const decimals = sourceParsedTokenAccount?.decimals;
   const isNative = sourceParsedTokenAccount?.isNativeAsset || false;
   const disabled = !isTargetComplete || isSending || isSendComplete;
-
   const handleTransferClick = useCallback(() => {
     // TODO: we should separate state for transaction vs fetching vaa
     if( !!signer &&

@@ -1,6 +1,7 @@
 import {
   ChainId,
   CHAIN_ID_ETH,
+  CHAIN_ID_POLYGON,
   CHAIN_ID_SOLANA,
 } from "@certusone/wormhole-sdk";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -40,6 +41,7 @@ export interface Transaction {
 export interface TransferState {
   activeStep: Steps;
   sourceChain: ChainId;
+  token: string;
   isSourceAssetWormholeWrapped: boolean | undefined;
   originChain: ChainId | undefined;
   originAsset: string | undefined;
@@ -67,7 +69,8 @@ export interface TransferState {
 
 const initialState: TransferState = {
   activeStep: 0,
-  sourceChain: CHAIN_ID_SOLANA,
+  sourceChain: CHAIN_ID_ETH,
+  token: "eth", 
   isSourceAssetWormholeWrapped: false,
   sourceWalletAddress: undefined,
   sourceParsedTokenAccount: undefined,
@@ -75,7 +78,7 @@ const initialState: TransferState = {
   originChain: undefined,
   originAsset: undefined,
   amount: "",
-  targetChain: CHAIN_ID_ETH,
+  targetChain: CHAIN_ID_POLYGON,
   targetAddressHex: undefined,
   targetAsset: getEmptyDataWrapper(),
   targetParsedTokenAccount: undefined,
@@ -88,7 +91,7 @@ const initialState: TransferState = {
   isApproving: false,
   isRecovery: false,
   gasPrice: undefined,
-  useRelayer: false,
+  useRelayer: true,
   relayerFee: undefined,
   acalaRelayerInfo: getEmptyDataWrapper(),
 };
@@ -177,6 +180,9 @@ export const transferSlice = createSlice({
     setAmount: (state, action: PayloadAction<string>) => {
       state.amount = action.payload;
     },
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+    },
     setTargetChain: (state, action: PayloadAction<ChainId>) => {
       const prevTargetChain = state.targetChain;
       state.targetChain = action.payload;
@@ -237,6 +243,7 @@ export const transferSlice = createSlice({
     },
     reset: (state) => ({
       ...initialState,
+      token: state.token,
       sourceChain: state.sourceChain,
       targetChain: state.targetChain,
     }),
@@ -316,6 +323,7 @@ export const {
   decrementStep,
   setStep,
   setSourceChain,
+  setToken,
   setSourceWormholeWrappedInfo,
   setSourceWalletAddress,
   setSourceParsedTokenAccount,

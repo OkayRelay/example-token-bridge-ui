@@ -143,7 +143,7 @@ function useFetchTargetAsset(nft?: boolean) {
     }
     setLastSuccessfulArgs(null);
     let cancelled = false;
-    (async () => {
+    (async () => {  
       if (isSourceAssetWormholeWrapped && originChain === targetChain) {
         if (originChain === CHAIN_ID_TERRA2) {
           const lcd = new LCDClient(getTerraConfig(CHAIN_ID_TERRA2));

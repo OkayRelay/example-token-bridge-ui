@@ -92,6 +92,7 @@ function useGetTargetParsedTokenAccounts() {
   useEffect(() => {
     // targetParsedTokenAccount is cleared on setTargetAsset, but we need to clear it on wallet changes too
     dispatch(setTargetParsedTokenAccount(undefined));
+    console.log(targetAsset, hasResolvedMetadata)
     if (!targetAsset || !hasResolvedMetadata) {
       return;
     }
