@@ -1,34 +1,28 @@
-import { Button, makeStyles, Typography } from "@material-ui/core";
-import { VerifiedUser } from "@material-ui/icons";
+import { makeStyles, Typography } from "@material-ui/core";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import useIsWalletReady from "../../hooks/useIsWalletReady";
 import {
   selectTransferAmount,
   selectTransferIsSendComplete,
-  selectTransferIsSourceComplete,
   selectTransferShouldLockFields,
   selectTransferSourceBalanceString,
   selectTransferSourceChain,
-  selectTransferSourceError,
   selectTransferSourceParsedTokenAccount,
   selectTransferTargetChain,
   selectTransferToken,
 } from "../../store/selectors";
 import {
-  incrementStep,
   setAmount,
   setSourceChain,
   setTargetChain,
 } from "../../store/transferSlice";
-import {  CHAIN_ID_TO_INFO,  getIsTransferDisabled, TOKENS } from "../../utils/consts";
+import {  CHAIN_ID_TO_INFO,  TOKENS } from "../../utils/consts";
 import ChainSelect from "../ChainSelect";
 import ChainSelectArrow from "../ChainSelectArrow";
 import KeyAndBalance from "../KeyAndBalance";
 import LowBalanceWarning from "../LowBalanceWarning";
 import NumberTextField from "../NumberTextField";
-import StepDescription from "../StepDescription";
 import { TokenSelector } from "../TokenSelectors/SourceTokenSelector";
 import SourceAssetWarning from "./SourceAssetWarning";
 import ChainWarningMessage from "../ChainWarningMessage";
@@ -76,38 +70,30 @@ function Source() {
     () => TOKENS[tranfertToken].sources.map((id) => CHAIN_ID_TO_INFO[id]),
     [tranfertToken]
   );
-  const isSourceTransferDisabled = useMemo(() => {
-    return getIsTransferDisabled(sourceChain, true);
-  }, [sourceChain]);
-  const isTargetTransferDisabled = useMemo(() => {
-    return getIsTransferDisabled(targetChain, false);
-  }, [targetChain]);
   const parsedTokenAccount = useSelector(
     selectTransferSourceParsedTokenAccount
   );
   const hasParsedTokenAccount = !!parsedTokenAccount;
   const uiAmountString = useSelector(selectTransferSourceBalanceString);
   const amount = useSelector(selectTransferAmount);
-  const error = useSelector(selectTransferSourceError);
-  const isSourceComplete = useSelector(selectTransferIsSourceComplete);
   const shouldLockFields = useSelector(selectTransferShouldLockFields);
-  const { isReady, statusMessage } = useIsWalletReady(sourceChain);
+  const { isReady } = useIsWalletReady(sourceChain);
   const isTransferLimited = useIsTransferLimited();
   const isSendComplete = useSelector(selectTransferIsSendComplete);
   const handleSourceChange = useCallback(
-    (event) => {
+    (event: any) => {
       dispatch(setSourceChain(event.target.value));
     },
     [dispatch]
   );
   const handleTargetChange = useCallback(
-    (event) => {
+    (event: any) => {
       dispatch(setTargetChain(event.target.value));
     },
     [dispatch]
   );
   const handleAmountChange = useCallback(
-    (event) => {
+    (event: any) => {
       dispatch(setAmount(event.target.value));
     },
     [dispatch]
@@ -187,18 +173,6 @@ function Source() {
       <ChainWarningMessage chainId={sourceChain} />
       <ChainWarningMessage chainId={targetChain} />
       <TransferLimitedWarning isTransferLimited={isTransferLimited} />
-      {/* <ButtonWithLoader
-        disabled={
-          !isSourceComplete ||
-          isSourceTransferDisabled ||
-          isTargetTransferDisabled
-        }
-        onClick={handleNextClick}
-        showLoader={false}
-        error={statusMessage || error}
-      >
-        Bridge
-      </ButtonWithLoader> */}
       {isSendComplete ? <ReceiveFooter /> : <SendFooter /> }
     </>
   );

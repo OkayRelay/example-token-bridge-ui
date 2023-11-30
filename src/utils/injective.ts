@@ -7,19 +7,20 @@ import {
 } from "@injectivelabs/sdk-ts";
 import { MsgBroadcaster, WalletStrategy } from "@injectivelabs/wallet-ts";
 import { INJECTIVE_NETWORK, INJECTIVE_NETWORK_CHAIN_ID } from "./consts";
+import { Network } from "@injectivelabs/networks";
 
 export const NATIVE_INJECTIVE_DECIMALS = 18;
 
 export const INJECTIVE_NATIVE_DENOM = "inj";
 
 export const getInjectiveWasmClient = () =>
-  new ChainGrpcWasmApi(INJECTIVE_NETWORK.sentryGrpcApi);
+  new ChainGrpcWasmApi(INJECTIVE_NETWORK.grpc); // Todo to check
 
 export const getInjectiveBankClient = () =>
-  new ChainGrpcBankApi(INJECTIVE_NETWORK.sentryGrpcApi);
+  new ChainGrpcBankApi(INJECTIVE_NETWORK.grpc); // Todo to check
 
 export const getInjectiveTxClient = () =>
-  new TxGrpcClient(INJECTIVE_NETWORK.sentryGrpcApi);
+  new TxGrpcClient(INJECTIVE_NETWORK.grpc); // Todo to check
 
 export const isValidInjectiveAddress = (address: string) => {
   if (isNativeDenomInjective(address)) {
@@ -45,13 +46,9 @@ export const broadcastInjectiveTx = async (
   memo: string = ""
 ) => {
   const client = getInjectiveTxClient();
+  
   const broadcaster = new MsgBroadcaster({
-    endpoints: {
-      indexerApi: INJECTIVE_NETWORK.indexerApi,
-      sentryGrpcApi: INJECTIVE_NETWORK.sentryGrpcApi,
-      sentryHttpApi: INJECTIVE_NETWORK.sentryHttpApi,
-    },
-    chainId: INJECTIVE_NETWORK_CHAIN_ID,
+    network: Network.Testnet, // Todo to check
     walletStrategy,
     simulateTx: true,
   });
@@ -60,7 +57,7 @@ export const broadcastInjectiveTx = async (
     address: walletAddress,
     memo,
   });
-  const tx = await client.fetchTx(txHash);
+  const tx = await client.fetchTx(txHash.txHash);
   if (!tx) {
     throw new Error("Unable to fetch transaction");
   }

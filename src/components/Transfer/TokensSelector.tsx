@@ -63,7 +63,7 @@ import useIsWalletReady from "../../hooks/useIsWalletReady";
     const sourceChain = useSelector(selectTransferSourceChain);
     const targetChain = useSelector(selectTransferTargetChain);
     const handleTokenChange = useCallback(
-        (event) => {
+        (event: any) => {
             const t = event.target.value
             const tokenInfo = TOKENS[t]
           dispatch(setToken(t));

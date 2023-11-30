@@ -20,7 +20,7 @@ import { setupNightly } from "@near-wallet-selector/nightly";
 import { setupSender } from "@near-wallet-selector/sender";
 import { KeyPair, WalletConnection } from "near-api-js";
 import React, {
-  ReactChildren,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -103,7 +103,7 @@ const NearDevnet: Network = {
 export const NearContextProvider = ({
   children,
 }: {
-  children: ReactChildren;
+  children: ReactNode;
 }) => {
   const [selector, setSelector] = useState<WalletSelector | null>(null);
   const [modal, setModal] = useState<WalletSelectorModal | null>(null);

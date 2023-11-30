@@ -407,7 +407,7 @@ export default function TokenPicker({
           variant="outlined"
           label="Search name or paste address"
           value={holderString}
-          onChange={(event) => setHolderString(event.target.value)}
+          onChange={(event: any) => setHolderString(event.target.value)}
           fullWidth
           margin="normal"
         />
@@ -416,7 +416,7 @@ export default function TokenPicker({
             variant="outlined"
             label="Token Id"
             value={tokenIdHolderString}
-            onChange={(event) => setTokenIdHolderString(event.target.value)}
+            onChange={(event: any) => setTokenIdHolderString(event.target.value)}
             fullWidth
             margin="normal"
           />

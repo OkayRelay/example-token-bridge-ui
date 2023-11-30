@@ -88,7 +88,7 @@ export default function TerraFeeDenomPicker(props: TerraFeeDenomPickerProps) {
         select
         fullWidth
         value={terraFeeDenom}
-        onChange={(event) => dispatch(setTerraFeeDenom(event.target.value))}
+        onChange={(event: any) => dispatch(setTerraFeeDenom(event.target.value))}
         disabled={props.disabled}
         className={classes.select}
       >

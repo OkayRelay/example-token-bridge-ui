@@ -29,7 +29,6 @@ ReactDOM.render(
                 <TerraWalletProvider>
                   <AlgorandContextProvider>
                     <XplaWalletProvider>
-                      <AptosWalletProvider>
                         <InjectiveWalletProvider>
                           <NearContextProvider>
                             <HashRouter>
@@ -37,7 +36,6 @@ ReactDOM.render(
                             </HashRouter>
                           </NearContextProvider>
                         </InjectiveWalletProvider>
-                      </AptosWalletProvider>
                     </XplaWalletProvider>
                   </AlgorandContextProvider>
                 </TerraWalletProvider>
