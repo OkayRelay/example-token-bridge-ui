@@ -9,7 +9,7 @@ import {
   import clsx from "clsx";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  selectTransferSourceChain, selectTransferTargetChain, selectTransferToken } from "../../store/selectors";
+import {  selectTransferSourceChain, selectTransferSourceParsedTokenAccount, selectTransferTargetChain, selectTransferToken } from "../../store/selectors";
 import { setSourceChain, setTargetAddressHex, setTargetAsset, setTargetChain, setTargetParsedTokenAccount, setToken } from "../../store/transferSlice";
 import { TOKENS } from "../../utils/consts";
 import { Token } from "../../utils/type";
@@ -61,6 +61,7 @@ import useIsWalletReady from "../../hooks/useIsWalletReady";
     const token = useSelector(selectTransferToken);
     const {provider, signerAddress} = useEthereumProvider()
     const sourceChain = useSelector(selectTransferSourceChain);
+    const sourceParsedTokenAccount = useSelector(selectTransferSourceParsedTokenAccount);
     const targetChain = useSelector(selectTransferTargetChain);
     const handleTokenChange = useCallback(
         (event: any) => {
@@ -119,6 +120,7 @@ import useIsWalletReady from "../../hooks/useIsWalletReady";
         token,
         targetChain,
         walletIsReady,
+        sourceParsedTokenAccount,
         sourceChain,
     ])
     useEffect(() => {
