@@ -9,20 +9,11 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { useCallback } from "react";
-import { useLocation } from "react-router";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
-import Attest from "./components/Attest";
-import Footer from "./components/Footer";
-import HeaderText from "./components/HeaderText";
-import NFT from "./components/NFT";
-import NFTOriginVerifier from "./components/NFTOriginVerifier";
-import Recovery from "./components/Recovery";
-import TokenOriginVerifier from "./components/TokenOriginVerifier";
+import { useCallback, useEffect } from "react";
+import { useLocation, useHistory } from "react-router";
+import { Link, Route, Switch } from "react-router-dom";
 import Transfer from "./components/Transfer";
 import UnwrapNative from "./components/UnwrapNative";
-import USDC from "./components/USDC";
-import WithdrawTokensTerra from "./components/WithdrawTokensTerra";
 import { CLUSTER } from "./utils/consts";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,16 +60,25 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
+  image: {
+    maxWidth: "100%"
+  },
 }));
 
 function App() {
   const classes = useStyles();
   const { pathname } = useLocation();
+  const {push} = useHistory();
   const handleClusterChange = useCallback((event) => {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("cluster", event.target.value);
     window.location.search = urlParams;
   }, []);
+  useEffect(() => {
+    if(pathname === "/") {
+      push("/transfer");
+    }
+  }, [pathname, push]);
   return (
     <div className={classes.bg}>
       {
@@ -111,51 +111,15 @@ function App() {
       }
       {["/transfer", "/nft", "/redeem"].includes(pathname) ? (
         <Container maxWidth="md" style={{ paddingBottom: 24 }}>
-          <HeaderText
-            white
-            subtitle={
-              <>
-                {/* <Typography>
-                  This is a developmental token bridge that tests transfers
-                  across chains for tokens and NFTs wrapped by Wormhole.
-                </Typography> */}
-              </>
-            }
-          >
-            Okay Token Bridge
-          </HeaderText>
+          <img className={classes.image} alt="" src={"./images/icon.png"} />
         </Container>
       ) : null}
       <Switch>
-        <Route exact path="/usdc">
-          <USDC />
-        </Route>
         <Route exact path="/transfer">
           <Transfer />
         </Route>
-        <Route exact path="/nft">
-          <NFT />
-        </Route>
-        <Route exact path="/redeem">
-          <Recovery />
-        </Route>
-        <Route exact path="/nft-origin-verifier">
-          <NFTOriginVerifier />
-        </Route>
-        <Route exact path="/token-origin-verifier">
-          <TokenOriginVerifier />
-        </Route>
-        <Route exact path="/register">
-          <Attest />
-        </Route>
-        <Route exact path="/withdraw-tokens-terra">
-          <WithdrawTokensTerra />
-        </Route>
         <Route exact path="/unwrap-native">
           <UnwrapNative />
-        </Route>
-        <Route>
-          <Redirect to="/transfer" />
         </Route>
       </Switch>
       <div className={classes.spacer} />

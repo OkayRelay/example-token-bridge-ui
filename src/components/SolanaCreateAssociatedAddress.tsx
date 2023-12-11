@@ -10,7 +10,8 @@ import { Button, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  Token,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
@@ -51,12 +52,8 @@ export function useAssociatedAccountExistsState(
       const connection = new Connection(SOLANA_HOST, "confirmed");
       const mintPublicKey = new PublicKey(mintAddress);
       const payerPublicKey = new PublicKey(solPK); // currently assumes the wallet is the owner
-      const associatedAddress = await Token.getAssociatedTokenAddress(
-        ASSOCIATED_TOKEN_PROGRAM_ID,
-        TOKEN_PROGRAM_ID,
-        mintPublicKey,
-        payerPublicKey
-      );
+      const associatedAddress = new PublicKey("")
+      // Todo getAssociatedTokenAddress
       const match = associatedAddress.toString() === readableTargetAddress;
       if (match) {
         const associatedAddressInfo = await connection.getAccountInfo(
@@ -105,12 +102,8 @@ export default function SolanaCreateAssociatedAddress({
       const connection = new Connection(SOLANA_HOST, "confirmed");
       const mintPublicKey = new PublicKey(mintAddress);
       const payerPublicKey = new PublicKey(solPK); // currently assumes the wallet is the owner
-      const associatedAddress = await Token.getAssociatedTokenAddress(
-        ASSOCIATED_TOKEN_PROGRAM_ID,
-        TOKEN_PROGRAM_ID,
-        mintPublicKey,
-        payerPublicKey
-      );
+      const associatedAddress = new PublicKey("")
+      // Todo getAssociatedTokenAddress
       const match = associatedAddress.toString() === readableTargetAddress;
       if (match) {
         const associatedAddressInfo = await connection.getAccountInfo(
@@ -119,7 +112,7 @@ export default function SolanaCreateAssociatedAddress({
         if (!associatedAddressInfo) {
           setIsCreating(true);
           const transaction = new Transaction().add(
-            await Token.createAssociatedTokenAccountInstruction(
+            await createAssociatedTokenAccountInstruction(
               ASSOCIATED_TOKEN_PROGRAM_ID,
               TOKEN_PROGRAM_ID,
               mintPublicKey,
@@ -228,17 +221,13 @@ export function SolanaCreateAssociatedAddressAlternate() {
       const connection = new Connection(SOLANA_HOST, "confirmed");
       const mintPublicKey = new PublicKey(targetAsset);
       const payerPublicKey = new PublicKey(solPK); // currently assumes the wallet is the owner
-      const associatedAddress = await Token.getAssociatedTokenAddress(
-        ASSOCIATED_TOKEN_PROGRAM_ID,
-        TOKEN_PROGRAM_ID,
-        mintPublicKey,
-        payerPublicKey
-      );
+      const associatedAddress = new PublicKey("")
+      // Todo getAssociatedTokenAddress
       const match = associatedAddress.toString() === base58TargetAddress;
       if (match) {
         try {
           const transaction = new Transaction().add(
-            await Token.createAssociatedTokenAccountInstruction(
+            await createAssociatedTokenAccountInstruction(
               ASSOCIATED_TOKEN_PROGRAM_ID,
               TOKEN_PROGRAM_ID,
               mintPublicKey,

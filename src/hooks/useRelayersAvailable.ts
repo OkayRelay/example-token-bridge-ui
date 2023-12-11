@@ -1,4 +1,4 @@
-import { ChainId } from "@certusone/wormhole-sdk";
+import { ChainId, CHAIN_ID_MOONBEAM, CHAIN_ID_POLYGON } from "@certusone/wormhole-sdk";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import {
   fetchRelayerTokenInfo,
   receiveRelayerTokenInfo,
 } from "../store/tokenSlice";
-import { RELAYER_INFO_URL } from "../utils/consts";
+import { PRIME_CHAIN_TO_ADDRESS, RELAYER_INFO_URL, WMATIC_ADDRESS } from "../utils/consts";
 
 export type RelayToken = {
   chainId?: ChainId;
@@ -44,7 +44,6 @@ const useRelayersAvailable = (
   shouldFire: boolean
 ): DataWrapper<RelayerTokenInfo> => {
   const relayerTokenInfo = useSelector(selectRelayerTokenInfo);
-  // console.log("relayerTokenInfo", relayerTokenInfo);
   const dispatch = useDispatch();
   const internalShouldFire =
     shouldFire &&
@@ -135,9 +134,14 @@ const getRelayersAvailable = (dispatch: Dispatch) => {
         "coingeckoId": "celo"
       },
       {
-        "chainId": 15,
-        "address": "near",
-        "coingeckoId": "near"
+        "chainId": CHAIN_ID_POLYGON,
+        "address": WMATIC_ADDRESS,
+        "coingeckoId": "matic"
+      },
+      {
+        "chainId": CHAIN_ID_MOONBEAM,
+        "address": PRIME_CHAIN_TO_ADDRESS[CHAIN_ID_MOONBEAM],
+        "coingeckoId": "usd-coin"
       }
     ],
     "relayers": [
@@ -149,48 +153,51 @@ const getRelayersAvailable = (dispatch: Dispatch) => {
     "feeSchedule": {
       "1": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "2": {
-        "type": "percent",
-        "feePercent": 1.25,
-        "gasEstimate": 280000
+        "type": "flat",
+        "feeUsd": 20.25
       },
       "3": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "4": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "5": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "6": {
         "type": "flat",
-        "feeUsd": 2
+        "feeUsd": 0.0001
       },
       "7": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "9": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "10": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "13": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
       },
       "14": {
         "type": "flat",
-        "feeUsd": 0.5
+        "feeUsd": 0.0001
+      },
+      "16": {
+        "type": "flat",
+        "feeUsd": 0.0001
       }
     }
   }));

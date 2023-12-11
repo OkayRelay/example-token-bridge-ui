@@ -26,7 +26,6 @@ export function getRelayAssetInfo(
   if (!originChain || !originAsset || !info) {
     return null;
   }
-  console.log(info, originAsset, originChain)
   return info.supportedTokens?.find(
     (x) =>
       originAsset.toLowerCase() === x.address?.toLowerCase() &&
@@ -101,7 +100,7 @@ function fixedUsd(fee: number) {
 }
 
 function requireGasPrice(targetChain: ChainId) {
-  return targetChain === CHAIN_ID_ETH;
+  return false;
 }
 
 function calculateFeeFormatted(
@@ -142,20 +141,17 @@ function useRelayerInfo(
     originAsset && originChain
       ? hexToNativeAssetString(originAsset, originChain)
       : null;
-
   useEffect(() => {
     if (
       !(originAssetNative && originChain && targetChain && relayerInfo.data)
     ) {
       return;
     }
-
     const relayerAsset = getRelayAssetInfo(
       originChain,
       originAssetNative,
       relayerInfo.data
     );
-      console.log(relayerAsset)
     //same check as relayable, to satiate typescript.
     if (
       !(

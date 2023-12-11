@@ -1,6 +1,6 @@
 import {
   createContext,
-  ReactChildren,
+  ReactNode,
   useCallback,
   useContext,
   useMemo,
@@ -45,7 +45,7 @@ export const SUPPORTED_WALLETS: InjectiveWalletInfo[] = [
 export const InjectiveWalletProvider = ({
   children,
 }: {
-  children: ReactChildren;
+  children: ReactNode;
 }) => {
   const [wallet, setWallet] = useState<WalletStrategy | null>(null);
   const [address, setAddress] = useState<string | null>(null);

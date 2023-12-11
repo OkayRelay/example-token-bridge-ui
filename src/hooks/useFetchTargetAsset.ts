@@ -3,6 +3,7 @@ import {
   CHAIN_ID_ALGORAND,
   CHAIN_ID_APTOS,
   CHAIN_ID_INJECTIVE,
+  CHAIN_ID_MOONBEAM,
   CHAIN_ID_NEAR,
   CHAIN_ID_SOLANA,
   CHAIN_ID_TERRA2,
@@ -70,6 +71,7 @@ import {
   NEAR_TOKEN_BRIDGE_ACCOUNT,
   NATIVE_NEAR_WH_ADDRESS,
   NATIVE_NEAR_PLACEHOLDER,
+  PRIME_CHAIN_TO_ADDRESS,
 } from "../utils/consts";
 import { LCDClient as XplaLCDClient } from "@xpla/xpla.js";
 import { getAptosClient } from "../utils/aptos";
@@ -141,7 +143,7 @@ function useFetchTargetAsset(nft?: boolean) {
     }
     setLastSuccessfulArgs(null);
     let cancelled = false;
-    (async () => {
+    (async () => {  
       if (isSourceAssetWormholeWrapped && originChain === targetChain) {
         if (originChain === CHAIN_ID_TERRA2) {
           const lcd = new LCDClient(getTerraConfig(CHAIN_ID_TERRA2));
@@ -262,7 +264,19 @@ function useFetchTargetAsset(nft?: boolean) {
         }
         return;
       }
-      if (
+      if (originChain === CHAIN_ID_MOONBEAM && originAsset === "00000000000000000000000054690d8e1cc638d3a2471c652bb68c77c79855a3") {
+        const tokenId = PRIME_CHAIN_TO_ADDRESS[targetChain]
+        if (!cancelled) {
+          dispatch(
+            setTargetAsset(
+              receiveDataWrapper({
+                doesExist: true,
+                address: tokenId,
+              })
+            )
+          );
+        }
+      } else if (
         isEVMChain(targetChain) &&
         provider &&
         hasCorrectEvmNetwork &&

@@ -207,6 +207,8 @@ export const selectTransferIsSending = (state: RootState) =>
   state.transfer.isSending;
 export const selectTransferIsRedeeming = (state: RootState) =>
   state.transfer.isRedeeming;
+  export const selectTransferToken = (state: RootState) =>
+  state.transfer.token;
 export const selectTransferRedeemTx = (state: RootState) =>
   state.transfer.redeemTx;
 export const selectTransferIsApproving = (state: RootState) =>

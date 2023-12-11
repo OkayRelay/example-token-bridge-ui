@@ -35,7 +35,7 @@ export function extractMintInfo(
 
   const uintArray = mintInfo?.mintAuthority;
   const pubkey = new PublicKey(uintArray);
-  const supply = BigNumber.from(mintInfo?.supply.reverse()).toString();
+  const supply = BigNumber.from(mintInfo?.supply).toString(); // Todo to check
   const output = {
     mintAuthority: pubkey?.toString(),
     supply: supply.toString(),

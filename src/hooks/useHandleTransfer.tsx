@@ -54,7 +54,7 @@ import {
 } from "@xpla/wallet-provider";
 import algosdk from "algosdk";
 import { Types } from "aptos";
-import { Signer } from "ethers";
+import { ethers, Signer } from "ethers";
 import { parseUnits, zeroPad } from "ethers/lib/utils";
 import { useSnackbar } from "notistack";
 import { useCallback, useMemo } from "react";
@@ -317,6 +317,72 @@ async function evm(
           feeParsed,
           overrides
         );
+    dispatch(
+      setTransferTx({ id: receipt.transactionHash, block: receipt.blockNumber })
+    );
+    enqueueSnackbar(null, {
+      content: <Alert severity="success">Transaction confirmed</Alert>,
+    });
+    const sequence = parseSequenceFromLogEth(
+      receipt,
+      getBridgeAddressForChain(chainId)
+    );
+    const emitterAddress = getEmitterAddressEth(
+      getTokenBridgeAddressForChain(chainId)
+    );
+    await fetchSignedVAA(
+      chainId,
+      emitterAddress,
+      sequence,
+      enqueueSnackbar,
+      dispatch
+    );
+  } catch (e) {
+    handleError(e, enqueueSnackbar, dispatch);
+  }
+}
+
+async function prime(
+  dispatch: any,
+  enqueueSnackbar: any,
+  signer: Signer,
+  tokenAddress: string,
+  decimals: number,
+  amount: string,
+  recipientChain: ChainId,
+  recipientAddress: Uint8Array,
+  isNative: boolean,
+  chainId: ChainId,
+  relayerFee?: string
+) {
+  dispatch(setIsSending(true));
+  try {
+    const baseAmountParsed = parseUnits(amount, decimals);
+    const feeParsed = parseUnits(relayerFee || "0", decimals);
+    const transferAmountParsed = baseAmountParsed.add(feeParsed);
+    // Klaytn requires specifying gasPrice
+
+        // The minimum ABI to get ERC20 Token balance
+        let minABI = [
+          {
+            "constant": false,
+            "inputs": [
+              { "name": "receiver", "type": "address" },
+              { "name": "route", "type": "address" },
+              { "name": "dstChainId", "type": "uint256" },
+              { "name": "amount", "type": "uint256" },
+            ],
+            "name": "sendTokensToChain",
+            "outputs": [
+            ],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
+          }
+        ];
+        
+        const contract = new ethers.Contract("0xae3EFc6c7787C98232fCC508B6c0c737F49E5650", minABI, signer);
+        const receipt = await contract.sendTokensToChain("0x084c1639e70da400De3eA5bDF4623f1B625BcC8D", "0x0f33CE8B2Fa6dC6d576c200f0ac4EB28A5f9846C", parseUnits("2"), transferAmountParsed)
     dispatch(
       setTransferTx({ id: receipt.transactionHash, block: receipt.blockNumber })
     );
@@ -637,7 +703,7 @@ async function injective(
       msgs,
       "Wormhole - Initiate Transfer"
     );
-    dispatch(setTransferTx({ id: tx.txhash, block: tx.height }));
+    dispatch(setTransferTx({ id: tx.txHash, block: tx.height }));
     enqueueSnackbar(null, {
       content: <Alert severity="success">Transaction confirmed</Alert>,
     });
@@ -690,10 +756,26 @@ export function useHandleTransfer() {
   const decimals = sourceParsedTokenAccount?.decimals;
   const isNative = sourceParsedTokenAccount?.isNativeAsset || false;
   const disabled = !isTargetComplete || isSending || isSendComplete;
-
   const handleTransferClick = useCallback(() => {
     // TODO: we should separate state for transaction vs fetching vaa
-    if (
+    if( !!signer &&
+      !!sourceAsset &&
+      decimals !== undefined &&
+      !!targetAddress && originAsset ===  "00000000000000000000000054690d8e1cc638d3a2471c652bb68c77c79855a3") {
+      prime(
+        dispatch,
+        enqueueSnackbar,
+        signer,
+        sourceAsset,
+        decimals,
+        amount,
+        targetChain,
+        targetAddress,
+        isNative,
+        sourceChain,
+        relayerFee
+      );
+    } else if (
       isEVMChain(sourceChain) &&
       !!signer &&
       !!sourceAsset &&
