@@ -509,8 +509,8 @@ export const getEvmChainId = (chainId: ChainId) =>
     : chainId === CHAIN_ID_MOONBEAM
     ? MOONBEAM_NETWORK_CHAIN_ID
     : undefined;
-export const SOLANA_HOST = process.env.REACT_APP_SOLANA_API_URL
-  ? process.env.REACT_APP_SOLANA_API_URL
+export const SOLANA_HOST = import.meta.env.VITE_APP_SOLANA_API_URL
+  ? import.meta.env.VITE_APP_SOLANA_API_URL
   : CLUSTER === "testnet"
   ? clusterApiUrl("devnet")
   : "http://localhost:8899";
@@ -621,8 +621,8 @@ export const getTokenBridgeAddressForChain = (chainId: ChainId) =>
     coalesceChainName(chainId)
   ].token_bridge || "";
 
-export const COVALENT_API_KEY = process.env.REACT_APP_COVALENT_API_KEY
-  ? process.env.REACT_APP_COVALENT_API_KEY
+export const COVALENT_API_KEY = import.meta.env.VITE_APP_COVALENT_API_KEY
+  ? import.meta.env.VITE_APP_COVALENT_API_KEY
   : "";
 
 export const COVALENT_ETHEREUM = 1; // Covalent only supports mainnet and Kovan

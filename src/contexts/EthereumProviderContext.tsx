@@ -12,7 +12,8 @@ import React, {
 import metamaskIcon from "../icons/metamask-fox.svg";
 import walletconnectIcon from "../icons/walletconnect.svg";
 import { EVM_RPC_MAP } from "../utils/metaMaskChainParameters";
-const CacheSubprovider = require("web3-provider-engine/subproviders/cache");
+// @ts-ignore
+import  CacheSubprovider from "web3-provider-engine/subproviders/cache";
 
 export type Provider = ethers.providers.Web3Provider | undefined;
 export type Signer = ethers.Signer | undefined;

@@ -9,8 +9,8 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { useCallback } from "react";
-import { useLocation } from "react-router";
+import { useCallback, useEffect } from "react";
+import { useLocation, useHistory } from "react-router";
 import { Link, Route, Switch } from "react-router-dom";
 import Transfer from "./components/Transfer";
 import UnwrapNative from "./components/UnwrapNative";
@@ -68,11 +68,17 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const { pathname } = useLocation();
+  const {push} = useHistory();
   const handleClusterChange = useCallback((event) => {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("cluster", event.target.value);
     window.location.search = urlParams;
   }, []);
+  useEffect(() => {
+    if(pathname === "/") {
+      push("/transfer");
+    }
+  }, [pathname, push]);
   return (
     <div className={classes.bg}>
       {
